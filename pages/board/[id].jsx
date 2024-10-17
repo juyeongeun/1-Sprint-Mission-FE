@@ -6,7 +6,7 @@ import Link from "next/link";
 import { fetchArticle } from "@/utils/articleApi";
 import { fetchComments } from "@/utils/articleChatApi";
 import { ROUTES } from "@/utils/rotues";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 
@@ -66,7 +66,6 @@ export default function BoardDetail({ initialComments, articleId, error }) {
 
   return (
     <div className={styles.container}>
-      <ToastContainer position="top-right" autoClose={3000} />
       <BoardDetailInfo article={article} />
       <BoardChat initialComments={initialComments} articleId={articleId} />
       <Link href={ROUTES.BOARD} passHref>

@@ -3,7 +3,7 @@ import styles from "./BoardChat.module.css";
 import ChatItem from "./ChatItem.jsx";
 import { useComments } from "@/hooks/useComments";
 import { throttle } from "@/utils/throttle";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function BoardChat({ initialComments, articleId }) {
@@ -80,7 +80,6 @@ export default function BoardChat({ initialComments, articleId }) {
 
   return (
     <div className={styles.container}>
-      <ToastContainer position="top-right" autoClose={2000} />
       <div className={styles.inputContainer}>
         <p className={styles.chatTitle}>댓글달기</p>
         <textarea
