@@ -3,10 +3,10 @@ import styles from "./ImageUpload.module.css";
 import Image from "next/image";
 
 const ImageUpload = ({ onImagesChange, initialImages = [] }) => {
-  const url = "https://thrift-shop.onrender.com";
   const [images, setImages] = useState([]);
   const fileInputRef = useRef(null);
 
+  // 이미지 변경 시 부모 컴포넌트에 변경 사항 전달하는 함수
   const handleImagesChange = useCallback(
     (updatedImages) => {
       onImagesChange(updatedImages);
@@ -14,13 +14,13 @@ const ImageUpload = ({ onImagesChange, initialImages = [] }) => {
     [onImagesChange]
   );
 
+  // 초기 이미지 설정
   useEffect(() => {
     if (initialImages.length > 0 && images.length === 0) {
       const formattedImages = initialImages.map((image) => ({
         file: null,
         previewUrl: image.previewUrl,
         isExisting: true,
-        isDeleted: false,
       }));
 
       setImages(formattedImages);
@@ -28,6 +28,7 @@ const ImageUpload = ({ onImagesChange, initialImages = [] }) => {
     }
   }, [initialImages, images.length, handleImagesChange]);
 
+  // 파일 선택 시 이미지 추가 처리
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
     if (files.length + images.length > 3) {
@@ -39,7 +40,6 @@ const ImageUpload = ({ onImagesChange, initialImages = [] }) => {
       file,
       previewUrl: URL.createObjectURL(file),
       isExisting: false,
-      isDeleted: false,
     }));
 
     const updatedImages = [...images, ...newImages].slice(0, 3);
@@ -47,17 +47,11 @@ const ImageUpload = ({ onImagesChange, initialImages = [] }) => {
     handleImagesChange(updatedImages);
   };
 
+  // 이미지 삭제 처리
   const handleImageDelete = (index) => {
-    const updatedImages = images.map((img, i) => {
-      if (i === index && img.isExisting) {
-        return { ...img, isDeleted: true };
-      }
-      return img;
-    });
-
-    const filteredImages = updatedImages.filter((img) => !img.isDeleted);
-    setImages(filteredImages);
-    handleImagesChange(filteredImages);
+    const updatedImages = images.filter((_, i) => i !== index);
+    setImages(updatedImages);
+    handleImagesChange(updatedImages);
   };
 
   return (
@@ -81,11 +75,7 @@ const ImageUpload = ({ onImagesChange, initialImages = [] }) => {
         {images.map((image, index) => (
           <div key={index} className={styles.imageItem}>
             <Image
-              src={
-                image.previewUrl.startsWith("blob:")
-                  ? image.previewUrl
-                  : url + image.previewUrl
-              }
+              src={image.previewUrl}
               alt={`미리보기 ${index + 1}`}
               className={styles.imagePreview}
               width={150}
