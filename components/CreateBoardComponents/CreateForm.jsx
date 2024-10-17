@@ -66,7 +66,7 @@ export default function CreateForm() {
   const isFormValid =
     values.title.trim() !== "" &&
     values.content.trim() !== "" &&
-    Object.keys(errors).every((key) => !errors[key]);
+    Object.values(errors).every((error) => !error);
 
   return (
     <div className={styles.container}>
