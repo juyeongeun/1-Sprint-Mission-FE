@@ -63,7 +63,7 @@ export default function EditArticlePage() {
     formData.images.forEach((image) => {
       if (image.isExisting) {
         formDataToSend.append("existingImages", image.previewUrl);
-      } else if (!image.isExisting) {
+      } else {
         formDataToSend.append("images", image.file);
       }
     });
