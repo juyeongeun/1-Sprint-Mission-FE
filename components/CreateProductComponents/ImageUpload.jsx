@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import styles from "./ImageUpload.module.css";
 import Image from "next/image";
+import { v4 as uuidv4 } from "uuid"; // UUID를 생성하기 위해 v4 사용
 
 const ImageUpload = ({ onImagesChange }) => {
   const [images, setImages] = useState([]);
@@ -13,7 +14,9 @@ const ImageUpload = ({ onImagesChange }) => {
       return;
     }
 
+    // 새로운 이미지들에 UUID를 추가하여 고유 ID 생성
     const newImages = files.map((file) => ({
+      id: uuidv4(), // UUID로 고유 ID 부여
       file,
       previewUrl: URL.createObjectURL(file),
     }));
@@ -23,8 +26,8 @@ const ImageUpload = ({ onImagesChange }) => {
     onImagesChange(updatedImages);
   };
 
-  const handleImageDelete = (index) => {
-    const updatedImages = images.filter((_, i) => i !== index);
+  const handleImageDelete = (id) => {
+    const updatedImages = images.filter((image) => image.id !== id);
     setImages(updatedImages);
     onImagesChange(updatedImages);
   };
@@ -47,11 +50,11 @@ const ImageUpload = ({ onImagesChange }) => {
           </label>
         </div>
 
-        {images.map((image, index) => (
-          <div key={index} className={styles.imageItem}>
+        {images.map((image) => (
+          <div key={image.id} className={styles.imageItem}>
             <Image
               src={image.previewUrl}
-              alt={`미리보기 ${index + 1}`}
+              alt={`미리보기 ${image.id}`}
               className={styles.imagePreview}
               width={150}
               height={150}
@@ -59,7 +62,7 @@ const ImageUpload = ({ onImagesChange }) => {
             <button
               type="button"
               className={styles.deleteButton}
-              onClick={() => handleImageDelete(index)}
+              onClick={() => handleImageDelete(image.id)}
             >
               &times;
             </button>
